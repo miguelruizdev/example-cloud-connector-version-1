@@ -5,61 +5,48 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.10.RELEASE</version>
+        <version>2.2.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.activiti.cloud.examples</groupId>
+    <groupId>org.activiti.cloud</groupId>
     <artifactId>example-cloud-connector</artifactId>
     <version>7.1.0-SNAPSHOT</version>
     <name>Activiti Cloud :: Example Cloud Connector</name>
     <properties>
-        <java.version>11</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <activiti-cloud-connectors.version>7.1.119</activiti-cloud-connectors.version>
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version> <!-- required for jx -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <java.release>11</java.release>
+        <java.version>1.${java.release}</java.version>
+        <maven.compiler.release>${java.release}</maven.compiler.release>
+        <activiti-cloud.version>7.1.490</activiti-cloud.version>
     </properties>
     <dependencyManagement>
         <dependencies>
-          <dependency>
-            <groupId>org.activiti.cloud.connector</groupId>
-            <artifactId>activiti-cloud-connectors-dependencies</artifactId>
-            <version>${activiti-cloud-connectors.version}</version>
-            <scope>import</scope>
-            <type>pom</type>
+            <dependency>
+                <groupId>org.activiti.cloud</groupId>
+                <artifactId>activiti-cloud-connectors-dependencies</artifactId>
+                <version>${activiti-cloud.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
         <dependency>
-          <groupId>org.springframework.cloud</groupId>
-          <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
-        </dependency>  	    
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+        </dependency>
         <dependency>
-            <groupId>org.activiti.cloud.connector</groupId>
+            <groupId>org.activiti.cloud</groupId>
             <artifactId>activiti-cloud-starter-connector</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -67,33 +54,22 @@
             <artifactId>spring-cloud-stream-binder-rabbit-test-support</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Marker Pom for Dependency Conversion Validation  -->
+        <!-- Marker Pom for Dependency Conversion Validation -->
         <dependency>
-            <groupId>org.activiti.cloud.connector</groupId>
+            <groupId>org.activiti.cloud</groupId>
             <artifactId>activiti-cloud-connectors-dependencies</artifactId>
-            <version>${activiti-cloud-connectors.version}</version>
+            <version>${activiti-cloud.version}</version>
             <type>pom</type>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-parent</artifactId>
-            <version>${project.parent.version}</version>
-            <type>pom</type>
-        </dependency>
-        <!-- Marker Pom for Dependency Conversion Validation  -->
+        <!-- Marker Pom for Dependency Conversion Validation -->
     </dependencies>
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
                 <configuration>
-                    <release>${java.version}</release>
-                    <showDeprecation>true</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                    <optimize>true</optimize>
+                    <verbose>false</verbose>
                 </configuration>
             </plugin>
             <plugin>
@@ -102,53 +78,21 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>build-info</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>${maven-deploy-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
-                <configuration>
-                    <forkCount>0</forkCount>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-    </plugins>
+        </plugins>
     </build>
     <repositories>
         <repository>
             <id>activiti-releases</id>
-            <name>Activiti Releases</name>
-            <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases</url>
         </repository>
     </repositories>
 </project>
