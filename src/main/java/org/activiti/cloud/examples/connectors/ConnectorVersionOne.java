@@ -16,6 +16,7 @@
 
 package org.activiti.cloud.examples.connectors;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.activiti.api.process.model.IntegrationContext;
@@ -48,11 +49,22 @@ public class ConnectorVersionOne {
     public void receive(IntegrationRequest integrationRequest) {
         IntegrationContext integrationContext = integrationRequest.getIntegrationContext();
         Map<String, Object> inBoundVariables = integrationContext.getInBoundVariables();
-        logger.info(">>inbound: " + inBoundVariables);
-        integrationContext.addOutBoundVariable("variable",
-                                               "valueFromConnectorVersionOne");
 
-        integrationResultSender.send(IntegrationResultBuilder.resultFor(integrationRequest, connectorProperties).buildMessage());
+        logger.info("hello from CONNECTOR VERSION ONE");
+
+        logger.info(">>inbound: " + inBoundVariables);
+
+        Map<String,Object> variableMap = Map.of("variable",
+                                                "valueFromConnectorVersionOne");
+
+        integrationResultSender.send(IntegrationResultBuilder
+                                             .resultFor(integrationRequest, connectorProperties)
+                                             .withOutboundVariables(variableMap)
+                                             .buildMessage());
+
+        logger.info(">>outbound: " + integrationContext.getOutBoundVariables().toString());
+
+        logger.info("bye from CONNECTOR VERSION ONE");
     }
 
 }
